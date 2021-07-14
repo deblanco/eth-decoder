@@ -9,9 +9,11 @@ export default class TxDecoder extends Decoder {
       const iface = this.interfaces[i];
       const parsedTransaction = iface.parseTransaction(tx);
       if (parsedTransaction) {
+        const abiFunction =
+          iface.functions[parsedTransaction.name] ||
+          iface.functions[parsedTransaction.signature];
         const parsedArgs = defaultAbiCoder.decode(
-          iface.functions[parsedTransaction.name || parsedTransaction.signature]
-            .inputs,
+          abiFunction.inputs,
           `0x${tx.data.substring(10)}`
         );
 
